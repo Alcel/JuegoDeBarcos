@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <GridPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.juegodebarcos.HelloController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
@@ -16,15 +15,17 @@
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
   </columnConstraints>
   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
    
-                <Label fx:id="welcomeText" text="Hola" />
-       <Button onAction="#onHelloButtonClick" text="Hello!" GridPane.columnIndex="2" />
+                <Label fx:id="welcomeText" text="Juego de Barcos" GridPane.columnSpan="5" GridPane.halignment="CENTER" />
+       <Button fx:id="start" onAction="#onStartButtonClick" text="Comenzar" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
    </children>
 </GridPane>
