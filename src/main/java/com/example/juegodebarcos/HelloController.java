@@ -51,12 +51,31 @@ public class HelloController implements Initializable {
             imagen.setLayoutX(imagen.getLayoutX()+deltaX);
             imagen.setLayoutY(imagen.getLayoutY()+deltaY);
             Bounds bounds = scene.getBoundsInLocal();
-            boolean rightBorder = imagen.getLayoutX()>=(bounds.getMaxX()-(imagen.getLayoutX()/2));
-            boolean leftBorder = imagen.getLayoutX()<=(bounds.getMaxX()-(imagen.getLayoutX()/2));
-            boolean bottomBorder = imagen.getLayoutY()>=(bounds.getMaxX()-(imagen.getLayoutY()/2));
-            boolean topBorder = imagen.getLayoutY()<=(bounds.getMaxX()-(imagen.getLayoutY()/2));
+
+           // System.out.println(bounds.getMaxX()+" "+bounds.getMaxY());
+            boolean rightBorder = false;
+            boolean leftBorder = false;
+            boolean bottomBorder = false;
+            boolean topBorder = false;
+
+            if(imagen.getLayoutX()>=(bounds.getMaxX()-(imagen.getLayoutX()/6))){
+
+                rightBorder=true;
+            }
+            if(imagen.getLayoutX()==0){
+                leftBorder=true;
+            }
+            if(imagen.getLayoutY()>=(bounds.getMaxY()-(imagen.getLayoutY()/6))){
+                bottomBorder=true;
+            }
+            if(imagen.getLayoutY()==0){
+                topBorder=true;
+            }
+
             if (rightBorder||leftBorder){
+
                 deltaX*=-1;
+
             }
             if (bottomBorder||topBorder){
                 deltaY*=-1;
