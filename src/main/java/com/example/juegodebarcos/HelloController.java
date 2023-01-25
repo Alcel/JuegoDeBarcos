@@ -42,63 +42,12 @@ public class HelloController implements Initializable {
         h1.start();
 
     }*/
-
-    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
-        double deltaX=2;
-        double deltaY=2;
-        @Override
-        public void handle(ActionEvent actionEvent) {
-            imagen.setLayoutX(imagen.getLayoutX()+deltaX);
-            imagen.setLayoutY(imagen.getLayoutY()+deltaY);
-            Bounds bounds = scene.getBoundsInLocal();
-
-           // System.out.println(bounds.getMaxX()+" "+bounds.getMaxY());
-            boolean rightBorder = false;
-            boolean leftBorder = false;
-            boolean bottomBorder = false;
-            boolean topBorder = false;
-
-            if(imagen.getLayoutX()>=(bounds.getMaxX()-(imagen.getLayoutX()/6))){
-
-                rightBorder=true;
-            }
-            if(imagen.getLayoutX()==0){
-                leftBorder=true;
-            }
-            if(imagen.getLayoutY()>=(bounds.getMaxY()-(imagen.getLayoutY()/6))){
-                bottomBorder=true;
-            }
-            if(imagen.getLayoutY()==0){
-                topBorder=true;
-            }
-
-            if (rightBorder||leftBorder){
-
-                deltaX*=-1;
-
-            }
-            if (bottomBorder||topBorder){
-                deltaY*=-1;
-            }
-        }
-    }));
-
-
-
-    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TranslateTransition translate = new TranslateTransition();
-        Image barco = new Image(getClass().getResourceAsStream("/images/PNG.png"));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        imagen.setImage(barco);
-        timeline.play();
-        /*translate.setNode(imagen);
-        translate.setDuration(Duration.millis(2000));
-        translate.setCycleCount(TranslateTransition.INDEFINITE);
-        translate.setByX(250);
-        translate.setAutoReverse(true);
-        translate.play();*/
+        Barco lancha = new Barco(imagen,scene);
+        lancha.iniciarMovimiento(0,0);
     }
+
+
 
 
 

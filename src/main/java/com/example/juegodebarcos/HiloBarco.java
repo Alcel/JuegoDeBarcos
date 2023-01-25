@@ -13,8 +13,8 @@ public class HiloBarco extends Thread{
 
     @Override
     public void run() {
-        int numC=b.tablero.getColumnCount();
-        int numF=b.tablero.getRowCount();
+       // int numC=b.tablero.getColumnCount();
+      //  int numF=b.tablero.getRowCount();
         boolean xA = true;
         boolean yA= true;
         while(true){
@@ -23,14 +23,7 @@ public class HiloBarco extends Thread{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            b.movimiento(x,y);
 
-            if (x+1==numC){
-                xA=false;
-            }
-            if(y+1==numF){
-                yA=false;
-            }
             if(x-1<0){
                 xA=true;
             }
