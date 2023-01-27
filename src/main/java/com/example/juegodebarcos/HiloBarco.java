@@ -1,5 +1,8 @@
 package com.example.juegodebarcos;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class HiloBarco extends Thread{
     Barco b;
     int x;
@@ -13,10 +16,9 @@ public class HiloBarco extends Thread{
 
     @Override
     public void run() {
-       // int numC=b.tablero.getColumnCount();
-      //  int numF=b.tablero.getRowCount();
-        boolean xA = true;
-        boolean yA= true;
+        boolean xA = false;
+        boolean yA= false;
+        ImageView imagen = b.barcoImg;
         while(true){
             try {
                 sleep(2000);
@@ -40,6 +42,14 @@ public class HiloBarco extends Thread{
                 y++;
             }else{
                 y--;
+            }
+            if(yA&&xA){
+                System.out.println("A");
+                imagen.setRotate(90);
+            }
+            if(!yA&&!xA){
+                System.out.println("B");
+                imagen.setRotate(180);
             }
 
         }
