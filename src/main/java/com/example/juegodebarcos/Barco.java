@@ -16,21 +16,31 @@ import javafx.util.Duration;
 public class Barco {
     ImageView barcoImg;
     AnchorPane tablero;
-    public Barco(ImageView img, AnchorPane tablero){
+
+    public Barco(ImageView img, AnchorPane tablero,double tamX,double tamY){
         barcoImg=img;
-        barcoImg.setRotate(90);
         this.tablero = tablero;
+        barcoImg.setFitHeight(tamX);
+        barcoImg.setFitWidth(tamY);
+
     }
 
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
         double deltaX=2;
         double deltaY=2;
+
+        double rotacion=45;
+
+
         @Override
         public void handle(ActionEvent actionEvent) {
             barcoImg.setLayoutX(barcoImg.getLayoutX()+deltaX);
             barcoImg.setLayoutY(barcoImg.getLayoutY()+deltaY);
             Bounds bounds = tablero.getBoundsInLocal();
-            int numA=(int) ((Math.random() * 2 + 1));
+            int numA=(int) ((Math.random() * 7 + 1));
+            double aspectRatio = barcoImg.getImage().getWidth() / barcoImg.getImage().getHeight();
+            double realWidth = Math.min(barcoImg.getFitWidth(), barcoImg.getFitHeight() * aspectRatio);
+            double realHeight = Math.min(barcoImg.getFitHeight(), barcoImg.getFitWidth() * aspectRatio);
 
 
             boolean rightBorder = false;
@@ -38,45 +48,65 @@ public class Barco {
             boolean bottomBorder = false;
             boolean topBorder = false;
 
-            if(barcoImg.getLayoutX()>=(bounds.getWidth()-barcoImg.getLayoutX()/6.5)){
+            if(barcoImg.getRotate()==0){
+                barcoImg.setRotate(rotacion);
+            }
+
+
+            if(barcoImg.getLayoutX()>=(bounds.getWidth()-realWidth)){
                 rightBorder=true;
-                barcoImg.setRotate(0);
             }
             if(barcoImg.getLayoutX()<10){
-                barcoImg.setRotate(0);
+
                 leftBorder=true;
+
             }
-            if(barcoImg.getLayoutY()>=bounds.getHeight()-barcoImg.getLayoutY()/4.3){
+            if(barcoImg.getLayoutY()>=(bounds.getHeight()-realHeight)){
+
                 bottomBorder=true;
-                barcoImg.setRotate(90);
+
             }
             if(barcoImg.getLayoutY()<10){
                 topBorder=true;
-                barcoImg.setRotate(90);
+
+
             }
 
             if (rightBorder||leftBorder){
-
                 deltaX*=-1;
 
             }
             if (bottomBorder||topBorder){
                 deltaY*=-1;
+
             }
             if ((rightBorder||leftBorder)&&numA==2){
-
                 deltaY*=-1;
 
+
             }
-            if ((bottomBorder||topBorder)&&numA==2){
-                deltaX*=-1;
+            if ((bottomBorder||topBorder)&&numA==2) {
+                deltaX *= -1;
+
             }
+            if ((rightBorder||leftBorder||bottomBorder||topBorder)&&numA!=2){
+                rotacion+=90;
+
+
+            }
+            if (rotacion==405){
+                rotacion=45;
+            }
+            barcoImg.setRotate(rotacion);
+
         }
     }));
 
     public void iniciarMovimiento(int x,int y) {
         TranslateTransition translate = new TranslateTransition();
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
+        barcoImg.setLayoutX(x);
+        barcoImg.setLayoutY(y);
         timeline.setCycleCount(Animation.INDEFINITE);
         barcoImg.setImage(barco);
         timeline.play();
