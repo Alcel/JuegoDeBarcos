@@ -32,8 +32,10 @@ public class HelloController implements Initializable {
        ImageView bg = new ImageView(new Image(getClass().getResourceAsStream(vg),1280,720,false,true));
 
         scene.getChildren().add(0,bg);
-        Barco lancha = new Barco(imagen,scene,60,100);
-        lancha.iniciarMovimiento(200,100);
+        Barco lancha = new Barco(scene,40,100);
+        Barco acorazado = new Barco(scene,50,140);
+        lancha.iniciarMovimiento(40,100);
+        acorazado.iniciarMovimiento(70,300);
 
     }
 

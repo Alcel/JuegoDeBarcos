@@ -17,11 +17,18 @@ public class Barco {
     ImageView barcoImg;
     AnchorPane tablero;
 
-    public Barco(ImageView img, AnchorPane tablero,double tamX,double tamY){
-        barcoImg=img;
+    double tamX;
+    double tamY;
+
+
+    public Barco(AnchorPane tablero,double tamX,double tamY){
+        Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
+        barcoImg=new ImageView(barco);
+        tablero.getChildren().add(barcoImg);
         this.tablero = tablero;
-        barcoImg.setFitHeight(tamX);
-        barcoImg.setFitWidth(tamY);
+        this.tamX=tamX;
+        this.tamY=tamY;
+
 
     }
 
@@ -48,6 +55,7 @@ public class Barco {
             boolean bottomBorder = false;
             boolean topBorder = false;
 
+
             if(barcoImg.getRotate()==0){
                 barcoImg.setRotate(rotacion);
             }
@@ -61,7 +69,7 @@ public class Barco {
                 leftBorder=true;
 
             }
-            if(barcoImg.getLayoutY()>=(bounds.getHeight()-realHeight)){
+            if(barcoImg.getLayoutY()>=(bounds.getHeight()-realHeight)*0.93){
 
                 bottomBorder=true;
 
@@ -103,12 +111,12 @@ public class Barco {
     }));
 
     public void iniciarMovimiento(int x,int y) {
-        TranslateTransition translate = new TranslateTransition();
-        Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
+        barcoImg.setFitHeight(tamX);
+        barcoImg.setFitWidth(tamY);
         barcoImg.setLayoutX(x);
         barcoImg.setLayoutY(y);
         timeline.setCycleCount(Animation.INDEFINITE);
-        barcoImg.setImage(barco);
+
         timeline.play();
     }
 }
