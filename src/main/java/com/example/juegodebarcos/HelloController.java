@@ -27,21 +27,29 @@ public class HelloController implements Initializable {
         h1.start();
 
     }*/
+
+
+
     public void initialize(URL url, ResourceBundle resourceBundle) {
         String vg= "/images/sea.jpg";
        ImageView bg = new ImageView(new Image(getClass().getResourceAsStream(vg),1280,720,false,true));
 
         scene.getChildren().add(0,bg);
-        Barco lancha = new Barco(scene,40,100);
-        Barco acorazado = new Barco(scene,50,140);
-        lancha.iniciarMovimiento(40,100);
-        acorazado.iniciarMovimiento(70,300);
+        ControlDeJuego cdj = new ControlDeJuego();
+        Barco lancha = new Barco(scene,40,100,40,100,1,cdj);
+        Barco acorazado = new Barco(scene,70,300,50,140,0,cdj);
+
+        lancha.start();
+        acorazado.start();
+
+        try{
+            lancha.join();
+            acorazado.join();
+
+        }catch(InterruptedException e){
+            System.err.println("Error");
+        }
+
 
     }
-
-
-
-
-
-
 }

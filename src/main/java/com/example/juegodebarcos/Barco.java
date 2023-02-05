@@ -13,21 +13,32 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 
-public class Barco {
+public class Barco extends Thread{
     ImageView barcoImg;
     AnchorPane tablero;
 
+    int posX;
+
+    int posY;
     double tamX;
     double tamY;
+    private ControlDeJuego cdj;
+
+    int id;
 
 
-    public Barco(AnchorPane tablero,double tamX,double tamY){
+    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id,ControlDeJuego cdj){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
         tablero.getChildren().add(barcoImg);
+        posX=x;
+        posY=y;
         this.tablero = tablero;
         this.tamX=tamX;
         this.tamY=tamY;
+        this.cdj=cdj;
+        this.id=id;
+        cdj.setBac(id);
 
 
     }
@@ -49,6 +60,8 @@ public class Barco {
             double realWidth = Math.min(barcoImg.getFitWidth(), barcoImg.getFitHeight() * aspectRatio);
             double realHeight = Math.min(barcoImg.getFitHeight(), barcoImg.getFitWidth() * aspectRatio);
 
+            cdj.posicion(barcoImg.getLayoutX(),barcoImg.getLayoutY());
+            System.out.println(id);
 
             boolean rightBorder = false;
             boolean leftBorder = false;
@@ -106,17 +119,22 @@ public class Barco {
                 rotacion=45;
             }
             barcoImg.setRotate(rotacion);
+            cdj.sonar();
+
 
         }
     }));
 
-    public void iniciarMovimiento(int x,int y) {
+    public void run() {
         barcoImg.setFitHeight(tamX);
         barcoImg.setFitWidth(tamY);
-        barcoImg.setLayoutX(x);
-        barcoImg.setLayoutY(y);
+        barcoImg.setLayoutX(posX);
+        barcoImg.setLayoutY(posY);
         timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.playFromStart();
 
-        timeline.play();
+        timeline.playFromStart();//No es codigo duplicado, exite por si la primera vez no se ejecuta bien
+
+
     }
 }
