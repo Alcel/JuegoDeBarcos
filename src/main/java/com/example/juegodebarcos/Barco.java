@@ -132,7 +132,6 @@ public class Barco extends Thread{
         barcoImg.setLayoutY(posY);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.playFromStart();
-
         timeline.playFromStart();//No es codigo duplicado, exite por si la primera vez no se ejecuta bien
 
 
