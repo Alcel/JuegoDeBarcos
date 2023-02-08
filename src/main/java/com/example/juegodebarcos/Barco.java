@@ -12,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
+import java.util.Timer;
+
 
 public class Barco extends Thread{
     ImageView barcoImg;
@@ -23,11 +25,12 @@ public class Barco extends Thread{
     double tamX;
     double tamY;
     private ControlDeJuego cdj;
+    int sonarCap;
 
     int id;
 
 
-    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id,ControlDeJuego cdj){
+    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id,ControlDeJuego cdj, int sonar){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
         tablero.getChildren().add(barcoImg);
@@ -38,9 +41,7 @@ public class Barco extends Thread{
         this.tamY=tamY;
         this.cdj=cdj;
         this.id=id;
-        cdj.setBac(id);
-
-
+        sonarCap=sonar;
     }
 
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
@@ -48,6 +49,10 @@ public class Barco extends Thread{
         double deltaY=2;
 
         double rotacion=45;
+
+
+
+
 
 
         @Override
@@ -59,9 +64,8 @@ public class Barco extends Thread{
             double aspectRatio = barcoImg.getImage().getWidth() / barcoImg.getImage().getHeight();
             double realWidth = Math.min(barcoImg.getFitWidth(), barcoImg.getFitHeight() * aspectRatio);
             double realHeight = Math.min(barcoImg.getFitHeight(), barcoImg.getFitWidth() * aspectRatio);
-
+            cdj.setBac(id);
             cdj.posicion(barcoImg.getLayoutX(),barcoImg.getLayoutY());
-            System.out.println(id);
 
             boolean rightBorder = false;
             boolean leftBorder = false;
@@ -119,7 +123,24 @@ public class Barco extends Thread{
                 rotacion=45;
             }
             barcoImg.setRotate(rotacion);
-            cdj.sonar();
+
+            if(cdj.sonar(sonarCap)!=404){
+                System.out.println("El barco localizado es el "+cdj.sonar(sonarCap)+"estableciendo combate");
+                timeline.pause();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                long start = System.currentTimeMillis();
+                // Arreglar start end
+                long end = System.currentTimeMillis();
+                if ( end - start>10000){
+                    timeline.play();
+                }
+
+            }
+
 
 
         }

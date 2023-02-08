@@ -51,8 +51,6 @@ public class HiloBarco extends Thread{
                 System.out.println("B");
                 imagen.setRotate(180);
             }
-
         }
-
     }
 }
