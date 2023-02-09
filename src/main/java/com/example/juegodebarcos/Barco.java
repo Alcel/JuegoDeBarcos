@@ -28,6 +28,11 @@ public class Barco extends Thread{
     int sonarCap;
 
     int id;
+    long start;
+    boolean empezado =false;
+
+    boolean engagingCombat =false;
+    long end;
 
 
     public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id,ControlDeJuego cdj, int sonar){
@@ -125,17 +130,19 @@ public class Barco extends Thread{
             barcoImg.setRotate(rotacion);
 
             if(cdj.sonar(sonarCap)!=404){
+                engagingCombat=true;
+                if(empezado=false){
+                    empezado=true;
+                    start = System.currentTimeMillis();
+                }
+
                 System.out.println("El barco localizado es el "+cdj.sonar(sonarCap)+"estableciendo combate");
                 timeline.pause();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                long start = System.currentTimeMillis();
+
                 // Arreglar start end
-                long end = System.currentTimeMillis();
+                end = System.currentTimeMillis();
                 if ( end - start>10000){
+                    empezado=true;
                     timeline.play();
                 }
 
