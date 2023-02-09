@@ -28,14 +28,16 @@ public class Barco extends Thread{
     int sonarCap;
 
     int id;
-    long start;
-    boolean empezado =false;
 
     boolean engagingCombat =false;
-    long end;
+    long startEng;
+    long endEng;
+
+    int ataque;
 
 
-    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id,ControlDeJuego cdj, int sonar){
+
+    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id,ControlDeJuego cdj, int sonar, int vida, int atq){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
         tablero.getChildren().add(barcoImg);
@@ -47,17 +49,16 @@ public class Barco extends Thread{
         this.cdj=cdj;
         this.id=id;
         sonarCap=sonar;
+        this.ataque=atq;
+        cdj.setVida(vida,id);
     }
+
 
     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
         double deltaX=2;
         double deltaY=2;
 
         double rotacion=45;
-
-
-
-
 
 
         @Override
@@ -129,27 +130,18 @@ public class Barco extends Thread{
             }
             barcoImg.setRotate(rotacion);
 
-            if(cdj.sonar(sonarCap)!=404){
+            if(cdj.sonar(sonarCap)!=404&&engagingCombat==false){
                 engagingCombat=true;
-                if(empezado=false){
-                    empezado=true;
-                    start = System.currentTimeMillis();
-                }
-
                 System.out.println("El barco localizado es el "+cdj.sonar(sonarCap)+"estableciendo combate");
-                timeline.pause();
+                cdj.conflicto(ataque);
+                startEng= System.currentTimeMillis();
+                    }
+            endEng = System.currentTimeMillis();
 
-                // Arreglar start end
-                end = System.currentTimeMillis();
-                if ( end - start>10000){
-                    empezado=true;
-                    timeline.play();
-                }
+            if (endEng - startEng>5000){
 
+                engagingCombat=false;
             }
-
-
-
         }
     }));
 

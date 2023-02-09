@@ -34,8 +34,8 @@ public class HelloController implements Initializable {
 
         scene.getChildren().add(0,bg);
         ControlDeJuego cdj = new ControlDeJuego();
-        Barco lancha = new Barco(scene,40,100,40,100,1,cdj,200);
-        Barco acorazado = new Barco(scene,70,300,50,140,0,cdj,100);
+        Barco lancha = new Barco(scene,40,100,40,100,1,cdj,200,100,30);
+        Barco acorazado = new Barco(scene,70,300,50,140,0,cdj,100,1000,80);
 
         lancha.start();
         acorazado.start();

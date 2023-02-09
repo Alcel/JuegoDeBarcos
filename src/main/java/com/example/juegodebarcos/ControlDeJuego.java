@@ -6,14 +6,21 @@ public class ControlDeJuego {
     double posX[]= new double[2];
     double posY[]= new double[2];
 
+    int vidas[]= new int[2];
+
     int bac;
     public ControlDeJuego(){
 
     }
 
+
     public  void posicion(double x,double y){
         posX[bac]=x;
         posY[bac]=y;
+    }
+
+    public void setVida(int i, int id){
+        vidas[id]=i;
     }
 
     public  void setBac(int i){
@@ -32,5 +39,9 @@ public class ControlDeJuego {
             }
         }
         return barcoLocalizado;
+    }
+
+    public void conflicto(int ataque) {
+
     }
 }
