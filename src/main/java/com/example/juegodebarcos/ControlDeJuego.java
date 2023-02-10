@@ -3,10 +3,11 @@ package com.example.juegodebarcos;
 import java.lang.reflect.Array;
 
 public class ControlDeJuego {
-    double posX[]= new double[2];
-    double posY[]= new double[2];
+    int numBarcos = 3;
+    double posX[]= new double[numBarcos];
+    double posY[]= new double[numBarcos];
 
-    int vidas[]= new int[2];
+    int vidas[]= new int[numBarcos];
 
     int bac;
     public ControlDeJuego(){
@@ -23,8 +24,12 @@ public class ControlDeJuego {
         vidas[id]=i;
     }
 
-    public  void setBac(int i){
+    public int getVida(int i){
+        int devolver = vidas[i];
+        return devolver;
+    }
 
+    public  void setBac(int i){
         bac=i;
     }
 
@@ -41,7 +46,7 @@ public class ControlDeJuego {
         return barcoLocalizado;
     }
 
-    public void conflicto(int ataque) {
-
+    public void conflicto(int ataque,int id) {
+        vidas[id] = vidas[id] -ataque;
     }
 }

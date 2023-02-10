@@ -78,6 +78,9 @@ public class Barco extends Thread{
             boolean bottomBorder = false;
             boolean topBorder = false;
 
+            if(cdj.getVida(id)<=0){
+                timeline.pause();
+            }else{
 
             if(barcoImg.getRotate()==0){
                 barcoImg.setRotate(rotacion);
@@ -92,7 +95,7 @@ public class Barco extends Thread{
                 leftBorder=true;
 
             }
-            if(barcoImg.getLayoutY()>=(bounds.getHeight()-realHeight)*0.93){
+            if(barcoImg.getLayoutY()>=(bounds.getHeight()-realHeight)*0.91){
 
                 bottomBorder=true;
 
@@ -130,17 +133,20 @@ public class Barco extends Thread{
             }
             barcoImg.setRotate(rotacion);
 
-            if(cdj.sonar(sonarCap)!=404&&engagingCombat==false){
+            if(cdj.sonar(sonarCap)!=404&&engagingCombat==false&&cdj.getVida(cdj.sonar(sonarCap))>0){
                 engagingCombat=true;
                 System.out.println("El barco localizado es el "+cdj.sonar(sonarCap)+"estableciendo combate");
-                cdj.conflicto(ataque);
+                cdj.conflicto(ataque,cdj.sonar(sonarCap));
+                System.out.println("Ataque");
+                System.out.println("Vida del barco dañado "+cdj.getVida(cdj.sonar(sonarCap)));
                 startEng= System.currentTimeMillis();
                     }
             endEng = System.currentTimeMillis();
 
-            if (endEng - startEng>5000){
+            if (endEng - startEng>3000){
 
                 engagingCombat=false;
+            }
             }
         }
     }));
