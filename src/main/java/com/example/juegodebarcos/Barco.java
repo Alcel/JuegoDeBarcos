@@ -1,19 +1,11 @@
 package com.example.juegodebarcos;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
+
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
-
-import java.util.Timer;
-
 
 public class Barco extends Thread{
     ImageView barcoImg;
@@ -24,63 +16,74 @@ public class Barco extends Thread{
     int posY;
     double tamX;
     double tamY;
-    private ControlDeJuego cdj;
+
     int sonarCap;
+    Timeline mio;
 
     int id;
 
     boolean engagingCombat =false;
-    long startEng;
-    long endEng;
 
     int ataque;
+    ControlDeJuego cdj = new ControlDeJuego();
+    double deltaX=2;
+    double deltaY=2;
+
+    double rotacion=45;
 
 
 
-    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id,ControlDeJuego cdj, int sonar, int vida, int atq){
+
+
+    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, int vida, int atq){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
-        tablero.getChildren().add(barcoImg);
+        barcoImg.setFitHeight(tamX);
+        barcoImg.setFitWidth(tamY);
         posX=x;
         posY=y;
+        barcoImg.setLayoutX(posX);
+
+        barcoImg.setLayoutY(posY);
+        tablero.getChildren().add(barcoImg);
+
         this.tablero = tablero;
         this.tamX=tamX;
         this.tamY=tamY;
-        this.cdj=cdj;
+        cdj.setVida(vida,id);
+
         this.id=id;
         sonarCap=sonar;
         this.ataque=atq;
-        cdj.setVida(vida,id);
     }
+    public void movimiento(int sonarCap, Boolean engagingCombat, int ataque){
 
 
-    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
-        double deltaX=2;
-        double deltaY=2;
-
-        double rotacion=45;
+        long startEng = 0;
+        long endEng;
 
 
-        @Override
-        public void handle(ActionEvent actionEvent) {
-            barcoImg.setLayoutX(barcoImg.getLayoutX()+deltaX);
-            barcoImg.setLayoutY(barcoImg.getLayoutY()+deltaY);
-            Bounds bounds = tablero.getBoundsInLocal();
-            int numA=(int) ((Math.random() * 7 + 1));
-            double aspectRatio = barcoImg.getImage().getWidth() / barcoImg.getImage().getHeight();
-            double realWidth = Math.min(barcoImg.getFitWidth(), barcoImg.getFitHeight() * aspectRatio);
-            double realHeight = Math.min(barcoImg.getFitHeight(), barcoImg.getFitWidth() * aspectRatio);
-            cdj.setBac(id);
-            cdj.posicion(barcoImg.getLayoutX(),barcoImg.getLayoutY());
+        barcoImg.setLayoutX(barcoImg.getLayoutX()+deltaX);
+        barcoImg.setLayoutY(barcoImg.getLayoutY()+deltaY);
+        Bounds bounds = tablero.getBoundsInLocal();
+        int numA=(int) ((Math.random() * 7 + 1));
+        double aspectRatio = barcoImg.getImage().getWidth() / barcoImg.getImage().getHeight();
+        double realWidth = Math.min(barcoImg.getFitWidth(), barcoImg.getFitHeight() * aspectRatio);
+        double realHeight = Math.min(barcoImg.getFitHeight(), barcoImg.getFitWidth() * aspectRatio);
 
-            boolean rightBorder = false;
-            boolean leftBorder = false;
-            boolean bottomBorder = false;
-            boolean topBorder = false;
+        cdj.setBac(id);
 
-            if(cdj.getVida(id)<=0){
-                timeline.pause();
-            }else{
+        cdj.posicion(barcoImg.getLayoutX(),barcoImg.getLayoutY());
+
+
+        boolean rightBorder = false;
+        boolean leftBorder = false;
+        boolean bottomBorder = false;
+        boolean topBorder = false;
+        if(cdj.getVida(id)<=0){
+            mio.pause();
+        }else{
+
 
             if(barcoImg.getRotate()==0){
                 barcoImg.setRotate(rotacion);
@@ -102,8 +105,6 @@ public class Barco extends Thread{
             }
             if(barcoImg.getLayoutY()<10){
                 topBorder=true;
-
-
             }
 
             if (rightBorder||leftBorder){
@@ -111,6 +112,7 @@ public class Barco extends Thread{
 
             }
             if (bottomBorder||topBorder){
+
                 deltaY*=-1;
 
             }
@@ -140,26 +142,17 @@ public class Barco extends Thread{
                 System.out.println("Ataque");
                 System.out.println("Vida del barco dañado "+cdj.getVida(cdj.sonar(sonarCap)));
                 startEng= System.currentTimeMillis();
-                    }
+            }
             endEng = System.currentTimeMillis();
 
             if (endEng - startEng>3000){
 
                 engagingCombat=false;
             }
-            }
         }
-    }));
+    }
 
     public void run() {
-        barcoImg.setFitHeight(tamX);
-        barcoImg.setFitWidth(tamY);
-        barcoImg.setLayoutX(posX);
-        barcoImg.setLayoutY(posY);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.playFromStart();
-        timeline.playFromStart();//No es codigo duplicado, exite por si la primera vez no se ejecuta bien
-
 
     }
 }

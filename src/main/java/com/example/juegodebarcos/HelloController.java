@@ -35,28 +35,36 @@ public class HelloController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         String vg= "/images/sea.jpg";
+        Barco []barcos= new Barco[3];
 
         ImageView bg = new ImageView(new Image(getClass().getResourceAsStream(vg),1280,720,false,true));
 
         scene.getChildren().add(0,bg);
-        ControlDeJuego cdj = new ControlDeJuego();
-        Barco lancha = new Barco(scene,40,100,40,100,1,cdj,200,100,30);
-        Barco acorazado = new Barco(scene,70,300,50,140,0,cdj,100,1000,80);
-        Barco acorazado2 = new Barco(scene,170,200,50,140,2,cdj,100,500,80);
+
+        Barco lancha = new Barco(scene,40,100,40,100,0,200,100,30);
+        Barco acorazado = new Barco(scene,70,300,50,140,1,100,1000,80);
+        Barco acorazado2 = new Barco(scene,170,200,50,140,2,100,500,80);
+        barcos[0]=lancha;
+        barcos[1]=acorazado;
+        barcos[2]=acorazado2;
+        ControlDeJuego cdj = new ControlDeJuego(barcos);
         mp.play();
 
+
         lancha.start();
-        acorazado.start();
+       acorazado.start();
         acorazado2.start();
+        cdj.timeline();
 
         try{
             lancha.join();
-            acorazado.join();
+           acorazado.join();
             acorazado2.join();
 
         }catch(InterruptedException e){
             System.err.println("Error");
         }
+
 
 
     }

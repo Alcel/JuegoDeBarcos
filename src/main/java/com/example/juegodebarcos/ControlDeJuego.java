@@ -1,23 +1,44 @@
 package com.example.juegodebarcos;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.geometry.Bounds;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
+
 import java.lang.reflect.Array;
+import java.util.HashMap;
 
 public class ControlDeJuego {
     int numBarcos = 3;
-    double posX[]= new double[numBarcos];
-    double posY[]= new double[numBarcos];
+
+    Barco [] barcos;
+    double posXA[]= new double[numBarcos];
+    double posYA[]= new double[numBarcos];
+    HashMap<Integer,Timeline> mapa = new HashMap<Integer, Timeline>();
+    int posX;
+    int posY;
+    int tamX;
+    int tamY;
 
     int vidas[]= new int[numBarcos];
+    Timeline timeline;
 
     int bac;
+    public ControlDeJuego(Barco[] barcos){
+        this.barcos=barcos;
+
+    }
     public ControlDeJuego(){
 
     }
 
 
     public  void posicion(double x,double y){
-        posX[bac]=x;
-        posY[bac]=y;
+        posXA[bac]=x;
+        posYA[bac]=y;
     }
 
     public void setVida(int i, int id){
@@ -35,8 +56,8 @@ public class ControlDeJuego {
 
     public synchronized int sonar(int cap){
         int barcoLocalizado=404;
-        for (int i=0;i< posX.length;i++){
-            if(Math.abs((posX[i]-posX[bac]))<cap&&!(posX[i]-posX[bac]==0)&&(Math.abs((posY[i]-posY[bac]))<cap&&!(posY[i]-posY[bac]==0))){
+        for (int i=0;i< posXA.length;i++){
+            if(Math.abs((posXA[i]-posXA[bac]))<cap&&!(posXA[i]-posXA[bac]==0)&&(Math.abs((posYA[i]-posYA[bac]))<cap&&!(posYA[i]-posYA[bac]==0))){
                /* System.out.println("posX["+i+"]"+posX[i]);
                 System.out.println("posX["+bac+"(bac)]"+posX[bac]);
                  System.out.println("Barco abistado por"+ bac);*/
@@ -45,8 +66,30 @@ public class ControlDeJuego {
         }
         return barcoLocalizado;
     }
+    //ARREGLAR
 
-    public void conflicto(int ataque,int id) {
+
+    public void timeline(){
+        int cont=0;
+        System.out.println(barcos.length);
+        for (Barco b:barcos) {
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10),event -> b.movimiento(b.sonarCap,b.engagingCombat,b.ataque)));
+            timeline.setCycleCount(Animation.INDEFINITE);
+            mapa.put(cont,timeline);
+            cont++;
+            timeline.play();
+        }
+    }
+
+    public HashMap<Integer, Timeline> getMapa() {
+        return mapa;
+    }
+
+    public void setMapa(HashMap<Integer, Timeline> mapa) {
+        this.mapa = mapa;
+    }
+
+    public void conflicto(int ataque, int id) {
         vidas[id] = vidas[id] -ataque;
     }
 }
