@@ -23,30 +23,34 @@ public class ControlDeJuego {
     int tamX;
     int tamY;
 
-    int vidas[]= new int[numBarcos];
+
+    HashMap<Integer,Double> vidas = new HashMap<Integer, Double>();
     Timeline timeline;
 
     int bac;
     public ControlDeJuego(Barco[] barcos){
         this.barcos=barcos;
 
+        setVidas();
+
     }
     public ControlDeJuego(){
 
     }
 
-
     public  void posicion(double x,double y){
         posXA[bac]=x;
         posYA[bac]=y;
     }
+    public void setVidas(){
+        int cont=0;
+        for(Barco b:barcos){
+            vidas.put(cont,barcos[cont].vida);
 
-    public void setVida(int i, int id){
-        vidas[id]=i;
+        }
     }
-
-    public int getVida(int i){
-        int devolver = vidas[i];
+    public double getVida(int id){
+        double devolver = vidas.get(id);
         return devolver;
     }
 
@@ -81,15 +85,8 @@ public class ControlDeJuego {
         }
     }
 
-    public HashMap<Integer, Timeline> getMapa() {
-        return mapa;
-    }
 
-    public void setMapa(HashMap<Integer, Timeline> mapa) {
-        this.mapa = mapa;
-    }
-
-    public void conflicto(int ataque, int id) {
-        vidas[id] = vidas[id] -ataque;
+    public void conflicto(double ataque, int id) {
+        vidas.put(id,vidas.get(id) -ataque);
     }
 }

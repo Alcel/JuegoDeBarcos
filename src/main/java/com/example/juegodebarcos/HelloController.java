@@ -18,7 +18,7 @@ public class HelloController implements Initializable {
     @FXML
     private AnchorPane scene;
     private Media media = new Media(getClass().getResource("/audio/eu.mp3").toString());
-    MediaPlayer mp = new MediaPlayer(media);
+    private MediaPlayer mp = new MediaPlayer(media);
 
     //@FXML
     /*public void onStartButtonClick(ActionEvent actionEvent) {
@@ -42,7 +42,7 @@ public class HelloController implements Initializable {
         scene.getChildren().add(0,bg);
 
         Barco lancha = new Barco(scene,40,100,40,100,0,200,100,30);
-        Barco acorazado = new Barco(scene,70,300,50,140,1,100,1000,80);
+        Barco acorazado = new Barco(scene,700,300,50,140,1,100,1000,80);
         Barco acorazado2 = new Barco(scene,170,200,50,140,2,100,500,80);
         barcos[0]=lancha;
         barcos[1]=acorazado;

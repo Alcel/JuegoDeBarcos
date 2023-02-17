@@ -22,6 +22,8 @@ public class Barco extends Thread{
 
     int id;
 
+    double vida;
+
     boolean engagingCombat =false;
 
     int ataque;
@@ -35,7 +37,7 @@ public class Barco extends Thread{
 
 
 
-    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, int vida, int atq){
+    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, double vida, int atq){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
         barcoImg.setFitHeight(tamX);
@@ -43,6 +45,7 @@ public class Barco extends Thread{
         posX=x;
         posY=y;
         barcoImg.setLayoutX(posX);
+        this.vida = vida;
 
         barcoImg.setLayoutY(posY);
         tablero.getChildren().add(barcoImg);
@@ -50,12 +53,21 @@ public class Barco extends Thread{
         this.tablero = tablero;
         this.tamX=tamX;
         this.tamY=tamY;
-        cdj.setVida(vida,id);
+
 
         this.id=id;
         sonarCap=sonar;
         this.ataque=atq;
     }
+
+    public double getVida() {
+        return vida;
+    }
+
+    public void setVida(double vida) {
+        this.vida = vida;
+    }
+
     public void movimiento(int sonarCap, Boolean engagingCombat, int ataque){
 
 
