@@ -28,27 +28,26 @@ public class ControlDeJuego {
     Timeline timeline;
 
     int bac;
-    public ControlDeJuego(Barco[] barcos){
-        this.barcos=barcos;
-
-        setVidas();
-
-    }
     public ControlDeJuego(){
 
+
+
     }
+
 
     public  void posicion(double x,double y){
         posXA[bac]=x;
         posYA[bac]=y;
     }
-    public void setVidas(){
-        int cont=0;
-        for(Barco b:barcos){
-            vidas.put(cont,barcos[cont].vida);
 
-        }
+
+
+    public void setBarcos(Barco[] barcos) {
+        this.barcos = barcos;
+
     }
+
+
     public double getVida(int id){
         double devolver = vidas.get(id);
         return devolver;

@@ -40,14 +40,15 @@ public class HelloController implements Initializable {
         ImageView bg = new ImageView(new Image(getClass().getResourceAsStream(vg),1280,720,false,true));
 
         scene.getChildren().add(0,bg);
-
-        Barco lancha = new Barco(scene,40,100,40,100,0,200,100,30);
-        Barco acorazado = new Barco(scene,700,300,50,140,1,100,1000,80);
-        Barco acorazado2 = new Barco(scene,170,200,50,140,2,100,500,80);
+        ControlDeJuego cdj = new ControlDeJuego();
+        Barco lancha = new Barco(cdj,scene,40,100,40,100,0,200,100,30);
+        Barco acorazado = new Barco(cdj,scene,700,300,50,140,1,100,1000,80);
+        Barco acorazado2 = new Barco(cdj,scene,170,200,50,140,2,100,500,80);
         barcos[0]=lancha;
         barcos[1]=acorazado;
         barcos[2]=acorazado2;
-        ControlDeJuego cdj = new ControlDeJuego(barcos);
+        cdj.setBarcos(barcos);
+
         mp.play();
 
 
@@ -58,7 +59,7 @@ public class HelloController implements Initializable {
 
         try{
             lancha.join();
-           acorazado.join();
+            acorazado.join();
             acorazado2.join();
 
         }catch(InterruptedException e){

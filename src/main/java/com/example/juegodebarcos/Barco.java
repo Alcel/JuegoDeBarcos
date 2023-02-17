@@ -27,7 +27,7 @@ public class Barco extends Thread{
     boolean engagingCombat =false;
 
     int ataque;
-    ControlDeJuego cdj = new ControlDeJuego();
+    ControlDeJuego cdj;
     double deltaX=2;
     double deltaY=2;
 
@@ -37,7 +37,7 @@ public class Barco extends Thread{
 
 
 
-    public Barco(AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, double vida, int atq){
+    public Barco(ControlDeJuego cdj,AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, double vida, int atq){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
         barcoImg.setFitHeight(tamX);
@@ -53,20 +53,16 @@ public class Barco extends Thread{
         this.tablero = tablero;
         this.tamX=tamX;
         this.tamY=tamY;
-
-
+        this.cdj=cdj;
         this.id=id;
         sonarCap=sonar;
         this.ataque=atq;
+        cdj.vidas.put(id,vida);
     }
 
-    public double getVida() {
-        return vida;
-    }
 
-    public void setVida(double vida) {
-        this.vida = vida;
-    }
+
+
 
     public void movimiento(int sonarCap, Boolean engagingCombat, int ataque){
 
@@ -92,74 +88,74 @@ public class Barco extends Thread{
         boolean leftBorder = false;
         boolean bottomBorder = false;
         boolean topBorder = false;
-        if(cdj.getVida(id)<=0){
-            mio.pause();
-        }else{
+        if (!cdj.vidas.isEmpty()) {
+            if (cdj.getVida(id) <= 0) {
+                cdj.mapa.get(id).stop();
+            } else {
+                if (barcoImg.getRotate() == 0) {
+                    barcoImg.setRotate(rotacion);
+                }
 
 
-            if(barcoImg.getRotate()==0){
+                if (barcoImg.getLayoutX() >= (bounds.getWidth() - realWidth)) {
+                    rightBorder = true;
+                }
+                if (barcoImg.getLayoutX() < 10) {
+
+                    leftBorder = true;
+
+                }
+                if (barcoImg.getLayoutY() >= (bounds.getHeight() - realHeight) * 0.91) {
+
+                    bottomBorder = true;
+
+                }
+                if (barcoImg.getLayoutY() < 10) {
+                    topBorder = true;
+                }
+
+                if (rightBorder || leftBorder) {
+                    deltaX *= -1;
+
+                }
+                if (bottomBorder || topBorder) {
+
+                    deltaY *= -1;
+
+                }
+                if ((rightBorder || leftBorder) && numA == 2) {
+                    deltaY *= -1;
+
+
+                }
+                if ((bottomBorder || topBorder) && numA == 2) {
+                    deltaX *= -1;
+
+                }
+                if ((rightBorder || leftBorder || bottomBorder || topBorder) && numA != 2) {
+                    rotacion += 90;
+
+
+                }
+                if (rotacion == 405) {
+                    rotacion = 45;
+                }
                 barcoImg.setRotate(rotacion);
-            }
 
+                if (cdj.sonar(sonarCap) != 404 && engagingCombat == false && cdj.getVida(cdj.sonar(sonarCap)) > 0) {
+                    engagingCombat = true;
+                    System.out.println("El barco localizado es el " + cdj.sonar(sonarCap) + "estableciendo combate");
+                    cdj.conflicto(ataque, cdj.sonar(sonarCap));
+                    System.out.println("Ataque");
+                    System.out.println("Vida del barco dañado " + cdj.getVida(cdj.sonar(sonarCap)));
+                    startEng = System.currentTimeMillis();
+                }
+                endEng = System.currentTimeMillis();
 
-            if(barcoImg.getLayoutX()>=(bounds.getWidth()-realWidth)){
-                rightBorder=true;
-            }
-            if(barcoImg.getLayoutX()<10){
+                if (endEng - startEng > 3000) {
 
-                leftBorder=true;
-
-            }
-            if(barcoImg.getLayoutY()>=(bounds.getHeight()-realHeight)*0.91){
-
-                bottomBorder=true;
-
-            }
-            if(barcoImg.getLayoutY()<10){
-                topBorder=true;
-            }
-
-            if (rightBorder||leftBorder){
-                deltaX*=-1;
-
-            }
-            if (bottomBorder||topBorder){
-
-                deltaY*=-1;
-
-            }
-            if ((rightBorder||leftBorder)&&numA==2){
-                deltaY*=-1;
-
-
-            }
-            if ((bottomBorder||topBorder)&&numA==2) {
-                deltaX *= -1;
-
-            }
-            if ((rightBorder||leftBorder||bottomBorder||topBorder)&&numA!=2){
-                rotacion+=90;
-
-
-            }
-            if (rotacion==405){
-                rotacion=45;
-            }
-            barcoImg.setRotate(rotacion);
-
-            if(cdj.sonar(sonarCap)!=404&&engagingCombat==false&&cdj.getVida(cdj.sonar(sonarCap))>0){
-                engagingCombat=true;
-                System.out.println("El barco localizado es el "+cdj.sonar(sonarCap)+"estableciendo combate");
-                cdj.conflicto(ataque,cdj.sonar(sonarCap));
-                System.out.println("Ataque");
-                System.out.println("Vida del barco dañado "+cdj.getVida(cdj.sonar(sonarCap)));
-                startEng= System.currentTimeMillis();
-            }
-            endEng = System.currentTimeMillis();
-
-            if (endEng - startEng>3000){
-
-                engagingCombat=false;
+                    engagingCombat = false;
+                }
             }
         }
     }
