@@ -76,7 +76,7 @@ public class ControlDeJuego {
         int cont=0;
         System.out.println(barcos.length);
         for (Barco b:barcos) {
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10),event -> b.movimiento(b.sonarCap,b.engagingCombat,b.ataque)));
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10),event -> b.movimiento(b.sonarCap,b.ataque)));
             timeline.setCycleCount(Animation.INDEFINITE);
             mapa.put(cont,timeline);
             cont++;

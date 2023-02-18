@@ -24,7 +24,7 @@ public class Barco extends Thread{
 
     double vida;
 
-    boolean engagingCombat =false;
+    boolean engagingCombat;
 
     int ataque;
     ControlDeJuego cdj;
@@ -32,6 +32,8 @@ public class Barco extends Thread{
     double deltaY=2;
 
     double rotacion=45;
+    long startEng;
+    long endEng;
 
 
 
@@ -46,6 +48,7 @@ public class Barco extends Thread{
         posY=y;
         barcoImg.setLayoutX(posX);
         this.vida = vida;
+        engagingCombat=false;
 
         barcoImg.setLayoutY(posY);
         tablero.getChildren().add(barcoImg);
@@ -64,12 +67,7 @@ public class Barco extends Thread{
 
 
 
-    public void movimiento(int sonarCap, Boolean engagingCombat, int ataque){
-
-
-        long startEng = 0;
-        long endEng;
-
+    public void movimiento(int sonarCap, int ataque){
 
         barcoImg.setLayoutX(barcoImg.getLayoutX()+deltaX);
         barcoImg.setLayoutY(barcoImg.getLayoutY()+deltaY);
@@ -153,7 +151,8 @@ public class Barco extends Thread{
                 endEng = System.currentTimeMillis();
 
                 if (endEng - startEng > 3000) {
-
+                    System.out.println(startEng);
+                    System.out.println(endEng);
                     engagingCombat = false;
                 }
             }
