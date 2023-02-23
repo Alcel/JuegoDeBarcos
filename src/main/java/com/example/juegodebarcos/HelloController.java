@@ -35,18 +35,31 @@ public class HelloController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         String vg= "/images/sea.jpg";
-        Barco []barcos= new Barco[3];
+        int tamAr= 7;
+        float tamMod = 0.7f; //Modifica el tamaño de todos los barcos
+        Barco []barcos= new Barco[tamAr];
 
         ImageView bg = new ImageView(new Image(getClass().getResourceAsStream(vg),1280,720,false,true));
 
         scene.getChildren().add(0,bg);
-        ControlDeJuego cdj = new ControlDeJuego();
-        Barco lancha = new Barco(cdj,scene,40,100,30,70,0,200,100,30);
-        Barco acorazado = new Barco(cdj,scene,700,300,40,100,1,100,1000,80);
-        Barco acorazado2 = new Barco(cdj,scene,170,200,40,100,2,100,500,80);
+        ControlDeJuego cdj = new ControlDeJuego(tamAr);
+        Barco lancha = new Barco(cdj,scene,40,100,30,70,0,200,100,30,0.8f);
+        Barco acorazado = new Barco(cdj,scene,700,300,40*tamMod,100*tamMod,1,100,1000,80,0.8f);
+        Barco acorazado2 = new Barco(cdj,scene,170,200,40*tamMod,100*tamMod,2,100,500,80,0.8f);
+        Barco acorazado3 = new Barco(cdj,scene,180,200,40*tamMod,100*tamMod,3,100,500,80,0.8f);
+        Barco acorazado4 = new Barco(cdj,scene,190,200,40*tamMod,100*tamMod,4,100,500,80,0.8f);
+        Barco acorazado5 = new Barco(cdj,scene,200,200,40*tamMod,100*tamMod,5,100,500,80,0.8f);
+        Barco acorazado6 = new Barco(cdj,scene,210,200,40*tamMod,100*tamMod,6,100,500,80,0.8f);
+
         barcos[0]=lancha;
         barcos[1]=acorazado;
         barcos[2]=acorazado2;
+        barcos[3]=acorazado3;
+        barcos[4]=acorazado4;
+        barcos[5]=acorazado5;
+        barcos[6]=acorazado6;
+
+
         cdj.setBarcos(barcos);
 
         mp.play();
@@ -65,8 +78,5 @@ public class HelloController implements Initializable {
         }catch(InterruptedException e){
             System.err.println("Error");
         }
-
-
-
     }
 }

@@ -12,34 +12,27 @@ public class Barco extends Thread{
     AnchorPane tablero;
 
     int posX;
-
     int posY;
     double tamX;
     double tamY;
-
     int sonarCap;
     Timeline mio;
-
     int id;
-
     double vida;
-
     boolean engagingCombat;
-
     int ataque;
     ControlDeJuego cdj;
     double deltaX=2;
     double deltaY=2;
-
     double rotacion=45;
     long startEng;
     long endEng;
 
+    float precision = 1;
 
 
 
-
-    public Barco(ControlDeJuego cdj,AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, double vida, int atq){
+    public Barco(ControlDeJuego cdj,AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, double vida, int atq,float precision){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
         barcoImg.setFitHeight(tamX);
@@ -49,6 +42,7 @@ public class Barco extends Thread{
         barcoImg.setLayoutX(posX);
         this.vida = vida;
         engagingCombat=false;
+        this.precision=precision;
 
         barcoImg.setLayoutY(posY);
         tablero.getChildren().add(barcoImg);
@@ -95,7 +89,7 @@ public class Barco extends Thread{
                 }
 
 
-                if (barcoImg.getLayoutX() >= (bounds.getWidth() - realWidth)) {
+                if (barcoImg.getLayoutX() >= (bounds.getWidth() - realWidth)*0.98) {
                     rightBorder = true;
                 }
                 if (barcoImg.getLayoutX() < 10) {
@@ -103,7 +97,7 @@ public class Barco extends Thread{
                     leftBorder = true;
 
                 }
-                if (barcoImg.getLayoutY() >= (bounds.getHeight() - realHeight) * 0.91) {
+                if (barcoImg.getLayoutY() >= (bounds.getHeight() - realHeight) * 0.90) {
 
                     bottomBorder = true;
 
@@ -143,7 +137,7 @@ public class Barco extends Thread{
                 if (cdj.sonar(sonarCap) != 404 && engagingCombat == false && cdj.getVida(cdj.sonar(sonarCap)) > 0) {
                     engagingCombat = true;
                     System.out.println("El barco localizado es el " + cdj.sonar(sonarCap) + "estableciendo combate");
-                    cdj.conflicto(ataque, cdj.sonar(sonarCap));
+                    cdj.conflicto(ataque, cdj.sonar(sonarCap),precision);
                     System.out.println("Ataque");
                     System.out.println("Vida del barco dañado " + cdj.getVida(cdj.sonar(sonarCap)));
                     startEng = System.currentTimeMillis();

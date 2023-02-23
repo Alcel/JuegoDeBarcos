@@ -10,25 +10,28 @@ import javafx.util.Duration;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.Random;
 
 public class ControlDeJuego {
     int numBarcos = 3;
 
     Barco [] barcos;
-    double posXA[]= new double[numBarcos];
-    double posYA[]= new double[numBarcos];
+    double posXA[];
+    double posYA[];
     HashMap<Integer,Timeline> mapa = new HashMap<Integer, Timeline>();
     int posX;
     int posY;
     int tamX;
     int tamY;
 
-
     HashMap<Integer,Double> vidas = new HashMap<Integer, Double>();
     Timeline timeline;
 
     int bac;
-    public ControlDeJuego(){
+    public ControlDeJuego(int tam){
+        this.numBarcos=tam;
+        posXA= new double[numBarcos];
+        posYA= new double[numBarcos];
 
 
 
@@ -61,9 +64,9 @@ public class ControlDeJuego {
         int barcoLocalizado=404;
         for (int i=0;i< posXA.length;i++){
             if(Math.abs((posXA[i]-posXA[bac]))<cap&&!(posXA[i]-posXA[bac]==0)&&(Math.abs((posYA[i]-posYA[bac]))<cap&&!(posYA[i]-posYA[bac]==0))){
-               /* System.out.println("posX["+i+"]"+posX[i]);
+                /* System.out.println("posX["+i+"]"+posX[i]);
                 System.out.println("posX["+bac+"(bac)]"+posX[bac]);
-                 System.out.println("Barco abistado por"+ bac);*/
+                System.out.println("Barco abistado por"+ bac);*/
                 barcoLocalizado=i;
             }
         }
@@ -85,7 +88,29 @@ public class ControlDeJuego {
     }
 
 
-    public void conflicto(double ataque, int id) {
-        vidas.put(id,vidas.get(id) -ataque);
+    public void conflicto(double ataque, int id,float precision) {
+        float probabilidad = (float) Math.random();
+        float probabilidadMenor = (float) Math.random();
+        System.out.println(probabilidad);
+        if (probabilidad<precision){
+            if(probabilidad<0.25f){
+                if (probabilidadMenor<0.5f){
+                    //Impacto en torre de control: 25%
+
+                } else {
+                    //Annadir En línea de flotación: 25%
+
+                }
+
+            }
+            else {
+                //Resto El resto: 50%
+            }
+
+            vidas.put(id,vidas.get(id) -ataque);
+        }
+
+
+
     }
 }
