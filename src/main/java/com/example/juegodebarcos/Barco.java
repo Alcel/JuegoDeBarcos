@@ -3,6 +3,7 @@ package com.example.juegodebarcos;
 
 import javafx.animation.Timeline;
 import javafx.geometry.Bounds;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,10 +30,16 @@ public class Barco extends Thread{
     long endEng;
 
     float precision = 1;
+    int velocidad;
+
+    int equipo;
+    long starBorde;
 
 
 
-    public Barco(ControlDeJuego cdj,AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, double vida, int atq,float precision){
+
+
+    public Barco(ControlDeJuego cdj,AnchorPane tablero,int x,int y,double tamX,double tamY,int id, int sonar, double vida, int atq,float precision,int velocidad,int equipo, boolean engagingCombat){
         Image barco = new Image(getClass().getResourceAsStream("/images/barcodeguerra.png"));
         barcoImg=new ImageView(barco);
         barcoImg.setFitHeight(tamX);
@@ -41,11 +48,17 @@ public class Barco extends Thread{
         posY=y;
         barcoImg.setLayoutX(posX);
         this.vida = vida;
-        engagingCombat=false;
+        this.engagingCombat=engagingCombat;
         this.precision=precision;
+        this.velocidad=velocidad;
+        this.equipo=equipo;
+
 
         barcoImg.setLayoutY(posY);
         tablero.getChildren().add(barcoImg);
+
+        ColorAdjust colorAdjust = new ColorAdjust();
+
 
         this.tablero = tablero;
         this.tamX=tamX;
@@ -55,6 +68,24 @@ public class Barco extends Thread{
         sonarCap=sonar;
         this.ataque=atq;
         cdj.vidas.put(id,vida);
+        if (equipo==0){
+            deltaX*=-1;
+            deltaY*=-1;
+            colorAdjust.setContrast(0.1);
+            colorAdjust.setHue(-0.8);
+            colorAdjust.setBrightness(0.1);
+            colorAdjust.setSaturation(0.2);
+
+        }
+        else{
+            colorAdjust.setContrast(0.1);
+            colorAdjust.setHue(-7);
+            colorAdjust.setBrightness(0.1);
+            colorAdjust.setSaturation(0.2);
+
+        }
+
+        this.barcoImg.setEffect(colorAdjust);
     }
 
 
@@ -73,13 +104,17 @@ public class Barco extends Thread{
 
         cdj.setBac(id);
 
+
         cdj.posicion(barcoImg.getLayoutX(),barcoImg.getLayoutY());
+        long ahoraBorde = System.currentTimeMillis();
+
 
 
         boolean rightBorder = false;
         boolean leftBorder = false;
         boolean bottomBorder = false;
         boolean topBorder = false;
+
         if (!cdj.vidas.isEmpty()) {
             if (cdj.getVida(id) <= 0) {
                 cdj.mapa.get(id).stop();
@@ -91,18 +126,20 @@ public class Barco extends Thread{
 
                 if (barcoImg.getLayoutX() >= (bounds.getWidth() - realWidth)*0.98) {
                     rightBorder = true;
+
                 }
                 if (barcoImg.getLayoutX() < 10) {
-
                     leftBorder = true;
 
                 }
-                if (barcoImg.getLayoutY() >= (bounds.getHeight() - realHeight) * 0.90) {
-
+                if (barcoImg.getLayoutY() >= (bounds.getHeight() - realHeight) * 0.88&&(ahoraBorde-starBorde)>1200) {
+                    System.out.println("Abajo");
+                    starBorde = System.currentTimeMillis();
                     bottomBorder = true;
 
                 }
                 if (barcoImg.getLayoutY() < 10) {
+
                     topBorder = true;
                 }
 
@@ -111,7 +148,6 @@ public class Barco extends Thread{
 
                 }
                 if (bottomBorder || topBorder) {
-
                     deltaY *= -1;
 
                 }
@@ -134,23 +170,23 @@ public class Barco extends Thread{
                 }
                 barcoImg.setRotate(rotacion);
 
-                if (cdj.sonar(sonarCap) != 404 && engagingCombat == false && cdj.getVida(cdj.sonar(sonarCap)) > 0) {
-                    engagingCombat = true;
+
+                if (cdj.sonar(sonarCap) != 404 && cdj.barcos[id].engagingCombat == false && cdj.getVida(cdj.sonar(sonarCap)) > 0) {
+                    cdj.barcos[id].engagingCombat = true;
                     System.out.println("El barco localizado es el " + cdj.sonar(sonarCap) + "estableciendo combate");
-                    cdj.conflicto(ataque, cdj.sonar(sonarCap),precision);
+                    cdj.conflicto(ataque, cdj.sonar(sonarCap),precision,equipo);
                     System.out.println("Ataque");
                     System.out.println("Vida del barco dañado " + cdj.getVida(cdj.sonar(sonarCap)));
                     startEng = System.currentTimeMillis();
                 }
                 endEng = System.currentTimeMillis();
 
-                if (endEng - startEng > 3000) {
-                    System.out.println(startEng);
-                    System.out.println(endEng);
-                    engagingCombat = false;
+                if (endEng - startEng > 2500) {
+                    cdj.barcos[id].engagingCombat = false;
                 }
             }
         }
+
     }
 
     public void run() {

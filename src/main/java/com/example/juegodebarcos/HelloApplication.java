@@ -28,14 +28,14 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view2.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
 
-
-        stage.setTitle("Hello World!");
+        stage.setTitle("Batalla Naval");
         stage.setScene(scene);
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
         stage.setMinHeight(720);
         stage.setMinWidth(1280);
+        stage.setResizable(false);
         stage.show();
     }
 

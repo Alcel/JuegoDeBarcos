@@ -18,7 +18,7 @@ public class HelloController implements Initializable {
     @FXML
     private AnchorPane scene;
     private Media media = new Media(getClass().getResource("/audio/eu.mp3").toString());
-    private MediaPlayer mp = new MediaPlayer(media);
+    private final MediaPlayer mp = new MediaPlayer(media);
 
     //@FXML
     /*public void onStartButtonClick(ActionEvent actionEvent) {
@@ -35,7 +35,9 @@ public class HelloController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         String vg= "/images/sea.jpg";
-        int tamAr= 7;
+        mp.setCycleCount(MediaPlayer.INDEFINITE);
+        mp.play();
+        int tamAr= 8;
         float tamMod = 0.7f; //Modifica el tamaño de todos los barcos
         Barco []barcos= new Barco[tamAr];
 
@@ -43,37 +45,42 @@ public class HelloController implements Initializable {
 
         scene.getChildren().add(0,bg);
         ControlDeJuego cdj = new ControlDeJuego(tamAr);
-        Barco lancha = new Barco(cdj,scene,40,100,30,70,0,200,100,30,0.8f);
-        Barco acorazado = new Barco(cdj,scene,700,300,40*tamMod,100*tamMod,1,100,1000,80,0.8f);
-        Barco acorazado2 = new Barco(cdj,scene,170,200,40*tamMod,100*tamMod,2,100,500,80,0.8f);
-        Barco acorazado3 = new Barco(cdj,scene,180,200,40*tamMod,100*tamMod,3,100,500,80,0.8f);
-        Barco acorazado4 = new Barco(cdj,scene,190,200,40*tamMod,100*tamMod,4,100,500,80,0.8f);
-        Barco acorazado5 = new Barco(cdj,scene,200,200,40*tamMod,100*tamMod,5,100,500,80,0.8f);
-        Barco acorazado6 = new Barco(cdj,scene,210,200,40*tamMod,100*tamMod,6,100,500,80,0.8f);
+        Barco lanchaA = new Barco(cdj,scene,800,100,30*tamMod,70*tamMod,0,200,10,30,0.8f,9 ,0,false);
+        Barco acorazadoA = new Barco(cdj,scene,800,200,50*tamMod,125*tamMod,1,20,120,80,0.8f,15,0,false );
+        Barco destructorA = new Barco(cdj,scene,800,300,40*tamMod,100*tamMod,2,12 ,80,80,0.8f,13,0,false );
+        Barco submarinoA = new Barco(cdj,scene,800,400,35*tamMod,87.5*tamMod,3,20,30,80,0.8f,11,0 ,false);
 
-        barcos[0]=lancha;
-        barcos[1]=acorazado;
-        barcos[2]=acorazado2;
-        barcos[3]=acorazado3;
-        barcos[4]=acorazado4;
-        barcos[5]=acorazado5;
-        barcos[6]=acorazado6;
+        Barco lanchaB = new Barco(cdj,scene,100,100,30*tamMod,70*tamMod,4,200,10,30,0.8f,9,1 ,false);
+        Barco acorazadoB = new Barco(cdj,scene,100,300,50*tamMod,125*tamMod,5,20,120,80,0.8f,15,1,false );
+        Barco destructorB = new Barco(cdj,scene,100,200,40*tamMod,100*tamMod,6,12 ,80,80,0.8f,13,1,false );
+        Barco submarinoB =new Barco(cdj,scene,100,400,35*tamMod,87.5*tamMod,7,20,30,80,0.8f,11,1,false );
+
+        barcos[0]=lanchaA;
+        barcos[1]=acorazadoA;
+        barcos[2]=destructorA;
+        barcos[3]=submarinoA;
+        barcos[4]=lanchaB;
+        barcos[5]=acorazadoB;
+        barcos[6]=destructorB;
+        barcos[7]=submarinoB;
 
 
         cdj.setBarcos(barcos);
 
-        mp.play();
 
+        for (Barco b:barcos
+             ) {
+            b.start();
 
-        lancha.start();
-       acorazado.start();
-        acorazado2.start();
+        }
         cdj.timeline();
 
         try{
-            lancha.join();
-            acorazado.join();
-            acorazado2.join();
+            for (Barco b:barcos
+            ) {
+                b.join();
+
+            }
 
         }catch(InterruptedException e){
             System.err.println("Error");

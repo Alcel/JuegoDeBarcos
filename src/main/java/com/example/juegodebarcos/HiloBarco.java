@@ -44,11 +44,11 @@ public class HiloBarco extends Thread{
                 y--;
             }
             if(yA&&xA){
-                System.out.println("A");
+
                 imagen.setRotate(90);
             }
             if(!yA&&!xA){
-                System.out.println("B");
+
                 imagen.setRotate(180);
             }
         }
